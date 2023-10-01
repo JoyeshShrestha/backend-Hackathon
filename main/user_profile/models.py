@@ -1,11 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
-   
-    id = models.AutoField(primary_key=True)
-    user_name = models.CharField(unique=True, max_length=255,default='')
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    # id = models.AutoField(primary_key=True)
+    # user_name = models.CharField(unique=True, max_length=255,default='')
+    # email = models.EmailField(unique=True)
+    # password = models.CharField(max_length=255)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)

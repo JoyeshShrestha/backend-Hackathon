@@ -31,7 +31,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
     'django.contrib.admin',
+    
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -39,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_profile',
     'items_listing',
-    'rest_framework'
+    
 ]
 
 MIDDLEWARE = [
@@ -125,10 +128,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTHENTICATION_BACKENDS = (
-    'path.to.CustomUserBackend',  # Specify the custom user backend if needed
-    # ...
-)
+# AUTHENTICATION_BACKENDS = (
+#     'path.to.CustomUserBackend',  # Specify the custom user backend if needed
+#     # ...
+# )
 # AUTH_USER_MODEL = 'user_profile.UserProfile'  # Replace 'myapp' with the name of your app
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -137,3 +140,11 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.ScryptPasswordHasher",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+# JWT_SECRET = 

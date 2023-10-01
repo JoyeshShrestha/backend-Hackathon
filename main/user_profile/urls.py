@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
-from .views import UserRegistrationView, LoginView, LogoutView, SpecificItemsView
-
+# from .views import UserRegistrationView, LoginView, LogoutView, SpecificItemsView,ItemViewSet
+from .views import SpecificItemsView,ItemViewSet, CreateUserView, CustomAuthToken, UserProfileView
 from rest_framework.routers import DefaultRouter
 
 # router = DefaultRouter()
@@ -17,11 +17,15 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     path('users/', views.UserProfileViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('register/', UserRegistrationView.as_view(), name='user-registration'),
-    path('login/', LoginView.as_view()),
+    # path('register/', UserRegistrationView.as_view(), name='user-registration'),
+    path('register/', CreateUserView.as_view(), name = "user-registration"),
+    path('login/', CustomAuthToken.as_view(), name='login'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
     path('specificitems/', SpecificItemsView.as_view(), name='specificitems'),
+    path('users/items/', ItemViewSet.as_view({'get': 'list', 'post': 'create'}),name='useritems'),
 
-    path('logout/', LogoutView.as_view()),
+
+    # path('logout/', LogoutView.as_view()),
     # path("", include(router.urls)),
 
 
