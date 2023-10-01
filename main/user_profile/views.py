@@ -13,7 +13,8 @@ from django.contrib.auth.hashers import make_password
 import bcrypt
 
 from django.contrib.auth.hashers import check_password
-
+from items_listing.models import ItemListing
+from items_listing.serializers import ItemListingSerializer
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
@@ -86,11 +87,19 @@ class LoginView(APIView):
 
             token = jwt.encode(payload, 'secret', algorithm='HS256')
             decoded_payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-
+            print(decoded_payload)
+            # try:
+            #     decoded_payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+            # except jwt.ExpiredSignatureError:
+            #     raise AuthenticationFailed('Token has expired')
+            # except jwt.DecodeError as e:
+            # # Print or log the error message for debugging purposes
+            #     print(f"Token decode error: {e}")
+            #     raise AuthenticationFailed('Token is invalid')
             response = Response()
             response.set_cookie(key='jwt', value=token, httponly=True)
             response.data = {
-                'message': 'Successfully logged in!'
+                'message': decoded_payload, 
             }
 
             return response
@@ -104,3 +113,24 @@ class LogoutView(APIView):
             'message' : 'successfully logged out!'
         }
         return response               
+    
+
+class SpecificItemsView(APIView):
+    def get(self, request):
+        token = request.COOKIES.get('jwt')
+        if token is None:
+            raise AuthenticationFailed('Unauthenticated!')
+        print (token)
+        try:
+            decoded_payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed('Token has expired')
+        except jwt.DecodeError as e:
+            # Print or log the error message for debugging purposes
+            print(f"Token decode error: {e}")
+            raise AuthenticationFailed('Token is invalid')
+
+        user_id = decoded_payload.get('id')
+        items = ItemListing.objects.filter(owner_id=user_id)
+        serializer = ItemListingSerializer(items, many=True)
+        return Response(serializer.data)    

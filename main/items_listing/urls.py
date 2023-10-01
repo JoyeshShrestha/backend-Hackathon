@@ -1,27 +1,23 @@
 from django.urls import path, include
 from . import views
-from .views import UserRegistrationView, LoginView, LogoutView, SpecificItemsView
-
+# from .views import UserRegistrationView, LoginView, LogoutView
+from .views import GetAllItemsView
 from rest_framework.routers import DefaultRouter
 
-# router = DefaultRouter()
-# router.register(r'items', ItemListingViewSet)
-# router.register(r'allitems', GetAllItemsView)
-# router.register(r'users/', UserProfileViewSet)
-# router.register(r'register/', UserRegistrationView)
-# router.register(r'login/', LoginView)
-# router.register(r'logout/', LogoutView)
+
 
 
 
 
 urlpatterns = [
-    path('users/', views.UserProfileViewSet.as_view({'get': 'list', 'post': 'create'})),
-    path('register/', UserRegistrationView.as_view(), name='user-registration'),
-    path('login/', LoginView.as_view()),
-    path('specificitems/', SpecificItemsView.as_view(), name='specificitems'),
+    path('allitems/', GetAllItemsView.as_view(), name='allitems'),
+    
 
-    path('logout/', LogoutView.as_view()),
+    path('items/', views.ItemListingViewSet.as_view({'get': 'list', 'post': 'create'})),
+
+
+    # path('login/', LoginView.as_view()),
+    # path('logout/', LogoutView.as_view()),
     # path("", include(router.urls)),
 
 

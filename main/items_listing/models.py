@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-
+from user_profile.models import UserProfile
 class ItemListing(models.Model):
     CONDITION_CHOICES = (
         ('Brand New', 'Brand New'),
@@ -12,7 +12,9 @@ class ItemListing(models.Model):
     description = models.TextField()
     condition = models.CharField(max_length=20, choices=CONDITION_CHOICES)
     availability_status = models.BooleanField(default=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
+    owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Price field as a decimal
+    image = models.ImageField(upload_to='item_images/', null=True, blank=True)  # Image field
+   
     def __str__(self):
         return self.title
